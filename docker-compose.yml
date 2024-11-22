@@ -1,0 +1,30 @@
+version: '3'
+services:
+  emsbackend:
+    build:
+      context: .
+    ports:
+      - "5050:5050"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/ems
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=password
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka:8761/eureka
+    depends_on:
+      - mysql
+      - eureka
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: ems
+    ports:
+      - "3306:3306"
+
+  eureka:
+    image: springcloud/eureka-server
+    environment:
+      - SPRING_PROFILES_ACTIVE=default
+    ports:
+      - "8761:8761"
